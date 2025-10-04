@@ -5,76 +5,73 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    string addBinary(string a, string b) {
-      int carry = 0;
-      int top = 0;
-      string res;
-      for (int i = a.length() - 1; i >= 0; i--)
+  string addBinary(string a, string b)
+  {
+    int lenOfA = a.length();
+    int lenOfB = b.length();
+    char carry = '0';
+    string res;
+
+    int i = lenOfA - 1;
+    int j = lenOfB - 1;
+
+    while (i >= 0 || j >= 0)
+    {
+      char bitA = (i >= 0) ? a[i] : '0';
+      char bitB = (j >= 0) ? b[j] : '0';
+
+      if (bitA == '0' && bitB == '0')
       {
-        for (int j = b.length() - 1; j >= 0; j--)
+        if (carry == '1')
         {
-          if (a[i] == '0' && b[j] == '0')
-          {
-            res.insert(top, "0");
-            top++;
-          }
-          else if (a[i] == '1' && b[j] == '0')
-          {
-            res.insert(top, "1");
-            top++;
-            carry = 0;
-          }
-          else if (a[i] == '0' && b[j] == '1')
-          {
-            res.insert(top, "1");
-            top++;
-            carry = 0;
-          }
-          else if (a[i] == '1' && b[j] == '1')
-          {
-            carry = 1;
-            res.insert(top, "0");
-            top++;
-          }
-          i--;
-          if (i == -1 || j == -1)
-          {
-            break;
-          }
+          res.insert(0, 1, '1');
+          carry = '0';
         }
-        if (a[i] == '1' && carry == 1)
+        else
         {
-          res.insert(top, "0");
-          top++;
-          carry = 1;
-        }
-        else if (a[i] == '1' && carry == 0)
-        {
-          res.insert(top, "1");
-          top++;
-          carry = 0;
-        }
-        else if (a[i] == '0' && carry == 0)
-        {
-          res.insert(top, "0");
-          top++;
-          carry = 0;
-        }
-        else if (a[i] == '0' && carry == 1)
-        {
-          res.insert(top, "1");
-          top++;
-          carry = 0;
+          res.insert(0, 1, '0');
         }
       }
-      if (carry)
+      else if ((bitA == '1' && bitB == '0') || (bitA == '0' && bitB == '1'))
       {
-        res.insert(0, "1");
+        if (carry == '1')
+        {
+          res.insert(0, 1, '0');
+          carry = '1';
+        }
+        else
+        {
+          res.insert(0, 1, '1');
+          carry = '0';
+        }
       }
-      cout << res;
+      else if (bitA == '1' && bitB == '1')
+      {
+        if (carry == '1')
+        {
+          res.insert(0, 1, '1');
+          carry = '1';
+        }
+        else
+        {
+          res.insert(0, 1, '0');
+          carry = '1';
+        }
+      }
+
+      i--;
+      j--;
     }
+
+    if (carry == '1')
+      res.insert(0, 1, '1');
+
+    return res;
+  }
 };
+
 // @lc code=end
 
